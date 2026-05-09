@@ -1,10 +1,14 @@
 import sqlite3
 import os
+from dotenv import load_dotenv
 
+load_dotenv()
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-caminho_banco = os.path.join(BASE_DIR, "estoque.db")
+DB_NAME = os.getenv("DB_NAME", "estoque.db")
+
+caminho_banco = os.path.join(BASE_DIR, DB_NAME)
 
 def conectar_banco():
     conexao = sqlite3.connect(caminho_banco)
@@ -24,5 +28,19 @@ def criar_tabela():
             preco REAL
         )
     ''')
+
+    # TABELA MOVIMENTACOES
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS movimentacoes (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            produto_id INTEGER NOT NULL,
+            tipo TEXT NOT NULL,
+            quantidade INTEGER NOT NULL,
+            data_movimentacao TEXT NOT NULL,
+            FOREIGN KEY (produto_id) REFERENCES produtos(id)
+        )
+    ''')
     conexao.commit()    
     conexao.close()
+
+   

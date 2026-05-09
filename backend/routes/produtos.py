@@ -42,6 +42,21 @@ def cadastrar_produto():
     estoque_minimo = dados.get('estoque_minimo')
     preco = dados.get('preco')
 
+    if not nome:
+        return jsonify({
+        "erro": "Nome obrigatório"
+    }), 400
+
+    if quantidade <= 0:
+        return jsonify({
+        "erro": "Produto sem estoque"
+    }), 400
+
+    if preco <= 0:
+        return jsonify({
+        "erro": "Preço inválido"
+    }), 400
+
     conexao, cursor = conectar_banco()
 
     cursor.execute('''
@@ -52,5 +67,5 @@ def cadastrar_produto():
 
     conexao.commit()
     conexao.close()
-
+    
     return jsonify({'mensagem': 'Produto cadastrado com sucesso!'}), 201
