@@ -1,7 +1,13 @@
 import sqlite3
+import os
+
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+caminho_banco = os.path.join(BASE_DIR, "estoque.db")
 
 def conectar_banco():
-    conexao = sqlite3.connect('estoque.db')
+    conexao = sqlite3.connect(caminho_banco)
     cursor = conexao.cursor()
     return conexao, cursor
 
