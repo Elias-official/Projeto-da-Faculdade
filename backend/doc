@@ -7,3 +7,6 @@
 # db.py é o arquivo onde a conexão com o banco de dados é estabelecida e o cursor é criado para executar as consultas SQL
 # estoque_db é o nome do banco de dados que será utilizado para armazenar as informações dos produtos
 # doc é para a documentação do projeto, onde serão descritos os endpoints da API, as funcionalidades implementadas, e outras informações relevantes sobre o projeto.
+# achei 2 bugs
+# 1. se vc errar uma variante, ele vai bugar e n irá funcionar
+# 2. O SQLITE ESTA CRIANDO O BANCO DE DADOS EM OUTRO LUGAR, ELE ESTA CRIANDO NA PASTA RAIZ DO PROJETO, E NAO NA PASTA BACKEND, POR ISSO O PROGRAMA NAO CONSEGUE ENCONTRAR O BANCO DE DADOS, PARA RESOLVER ISSO, VOCE PRECISA MUDAR O CAMINHO DO BANCO DE DADOS PARA 'backend/estoque.db' NO ARQUIVO DB.PY KKKKKKKKKKKKKKKKKKKKKKKKKKKK

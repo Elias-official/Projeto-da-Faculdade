@@ -1,6 +1,5 @@
-from flask import Flask
+from flask import Flask, render_template
 from routes.produtos import produtos_bp
-from flask import render_template
 from database.db import criar_tabela
 
 
