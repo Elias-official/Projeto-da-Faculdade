@@ -1,0 +1,9 @@
+# templates é para html
+# static é para css, js, imagens, etc
+# backend é para o código python, ou seja, a lógica do sistema
+# app.py é o arquivo principal, onde a aplicação é criada e configurada
+# produtos.py é um arquivo onde as rotas relacionadas aos produtos serão criadas
+# database é para a configuração do banco de dados, onde a conexão e o cursor são criados
+# db.py é o arquivo onde a conexão com o banco de dados é estabelecida e o cursor é criado para executar as consultas SQL
+# estoque_db é o nome do banco de dados que será utilizado para armazenar as informações dos produtos
+# doc é para a documentação do projeto, onde serão descritos os endpoints da API, as funcionalidades implementadas, e outras informações relevantes sobre o projeto.
