@@ -1,71 +1,109 @@
 from flask import Blueprint, jsonify, request
 from database.db import conectar_banco
+from services.produto_service import adicionar_produto, listar_produtos, deletar_produto
 
 produtos_bp = Blueprint('produtos', __name__)
 
 # LISTAR PRODUTOS
 
 @produtos_bp.route('/produtos', methods=['GET'])
-def listar_produtos():
-    # Aqui você pode adicionar a Lógica para Listar os Produtos
-    conexao, cursor = conectar_banco()
+def listar_produtos_route():
+    with conectar_banco() as conexao:
+        produtos = listar_produtos(conexao)
 
-    cursor.execute("SELECT * FROM produtos")
-    produtos = cursor.fetchall()
-
-    conexao.close()
-
-    lista_produtos = []
-
-    for produto in produtos:
-        lista_produtos.append({
-            'id': produto[0],
-            'nome': produto[1],
-            'categoria': produto[2],
-            'quantidade': produto[3],
-            'estoque_minimo': produto[4],
-            'preco': produto[5]
-        })
-
-    return jsonify(lista_produtos)
+    return jsonify(produtos)
 
 # CADASTRAR PRODUTO 
 
 @produtos_bp.route('/produtos', methods=['POST'])
 def cadastrar_produto():
+    dados = request.json or {}
 
-    dados = request.json
+    try:
+        with conectar_banco() as conexao:
+            produto_id = adicionar_produto(conexao, dados)
+
+        return jsonify({
+            'mensagem': 'Produto cadastrado com sucesso!',
+            'id': produto_id
+        }), 201
+
+    except ValueError as e:
+        return jsonify({'erro': str(e)}), 400
     
-    nome = dados.get('nome')
-    categoria = dados.get('categoria')
-    quantidade = dados.get('quantidade')
-    estoque_minimo = dados.get('estoque_minimo')
-    preco = dados.get('preco')
+@produtos_bp.route('/dashboard', methods=['GET'])
+def dashboard():
 
-    if not nome:
-        return jsonify({
-        "erro": "Nome obrigatório"
-    }), 400
+    conexao = conectar_banco()
 
-    if quantidade <= 0:
-        return jsonify({
-        "erro": "Produto sem estoque"
-    }), 400
+    cursor = conexao.cursor()
 
-    if preco <= 0:
-        return jsonify({
-        "erro": "Preço inválido"
-    }), 400
+    # TOTAL PRODUTOS
+    cursor.execute("SELECT COUNT(*) FROM produtos")
 
-    conexao, cursor = conectar_banco()
+    total_produtos = cursor.fetchone()[0]
+
+    # ESTOQUE TOTAL
+    cursor.execute("SELECT SUM(estoque_atual) FROM produtos")
+
+    estoque_total = cursor.fetchone()[0]
+
+    # ESTOQUE BAIXO
+    cursor.execute('''
+        SELECT COUNT(*) FROM produtos
+        WHERE estoque_atual <= estoque_minimo
+    ''')
+
+    estoque_baixo = cursor.fetchone()[0]
+
+    # VALOR ESTOQUE
+    cursor.execute('''
+        SELECT SUM(estoque_atual * preco)
+        FROM produtos
+    ''')
+
+    valor_estoque = cursor.fetchone()[0]
+
+    conexao.close()
+
+    return jsonify({
+
+        'total_produtos': total_produtos,
+
+        'estoque_total': estoque_total,
+
+        'estoque_baixo': estoque_baixo,
+
+        'valor_estoque': valor_estoque
+
+    })  
+
+@produtos_bp.route('/grafico/categorias', methods=['GET'])
+def grafico_categorias():
+
+    conexao = conectar_banco()
+
+    cursor = conexao.cursor()
 
     cursor.execute('''
-        INSERT INTO produtos 
-        (nome, categoria, quantidade, estoque_minimo, preco)
-        VALUES (?, ?, ?, ?, ?)
-    ''', (nome, categoria, quantidade, estoque_minimo, preco))
+        SELECT categoria, COUNT(*) as total
+        FROM produtos
+        GROUP BY categoria
+    ''')
 
-    conexao.commit()
+    dados = cursor.fetchall()
+
     conexao.close()
-    
-    return jsonify({'mensagem': 'Produto cadastrado com sucesso!'}), 201
+
+    categorias = []
+
+    for item in dados:
+
+        categorias.append({
+
+            'categoria': item[0],
+
+            'total': item[1]
+        })
+
+    return jsonify(categorias) 
