@@ -1,41 +1,46 @@
 import os
 from dotenv import load_dotenv
-from flask import Flask, render_template
-from routes.produtos import produtos_bp
-from database.db import criar_tabela, inserir_produtos_padrao
+from flask import Flask, jsonify
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
-from routes.auth import auth_bp
 
 load_dotenv()
 
-app = Flask(__name__)
-app.secret_key = os.getenv('SECRET_KEY', '01994')
-CORS(app)
-app.config['JWT_SECRET_KEY'] = 'estoque_secret_key'
-jwt = JWTManager(app)
 
-criar_tabela()
+def create_app():
+    app = Flask(__name__, template_folder='templates')
+    app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'estoque_secret_key')
+    app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY', 'estoque_jwt_secret')
+    app.config['JWT_TOKEN_LOCATION'] = ['headers']
+    app.config['JWT_ACCESS_TOKEN_EXPIRES'] = False
 
-inserir_produtos_padrao()
+    CORS(app)
+    JWTManager(app)
 
-from database.db import inserir_usuarios_padrao
+    from database.db import criar_tabelas, inserir_dados_padrao
+    criar_tabelas()
+    inserir_dados_padrao()
 
-inserir_usuarios_padrao()
+    from routes.auth import auth_bp
+    from routes.produtos import produtos_bp
+    from routes.movimentacoes import movimentacoes_bp
+    from routes.usuarios import usuarios_bp
+    from routes.categorias import categorias_bp
+    from routes.relatorios import relatorios_bp
 
-app.register_blueprint(produtos_bp)
-app.register_blueprint(auth_bp)
-from routes.usuarios import usuarios_bp
+    app.register_blueprint(auth_bp)
+    app.register_blueprint(produtos_bp)
+    app.register_blueprint(movimentacoes_bp)
+    app.register_blueprint(usuarios_bp)
+    app.register_blueprint(categorias_bp)
+    app.register_blueprint(relatorios_bp)
 
-app.register_blueprint(usuarios_bp)
-from routes.movimentacoes import movimentacoes_bp
+    @app.route('/')
+    def status():
+        return jsonify({'status': 'API de inventário em execução'})
 
-app.register_blueprint(movimentacoes_bp)
-
-@app.route('/')
-def homepage():
-    return render_template('homepage.html')
+    return app
 
 
-if __name__ == "__main__":
-    app.run(debug=True)
+if __name__ == '__main__':
+    create_app().run(host='0.0.0.0', port=int(os.getenv('PORT', 5000)), debug=True)

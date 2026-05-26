@@ -1,18 +1,13 @@
+import sys
 import os
-from dotenv import load_dotenv
-from flask import Flask
-from routes.rest import produtos_bp
-from database.db import conectar_banco, criar_tabela, inserir_produtos_padrao
 
-load_dotenv()
+# Add the parent directory to the path so we can import the app module
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-app = Flask(__name__)
-app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', '01994')
+from app import create_app
 
-app.register_blueprint(produtos_bp)
+app = create_app()
 
-criar_tabela()
-
-if __name__ == "__main__":
-    app.run(debug=True)
+if __name__ == '__main__':
+    app.run(debug=True, host='0.0.0.0', port=5000)
 

@@ -1,89 +1,108 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-
-    font-family: Arial, Helvetica, sans-serif;
-
-    background: #f5f6fa;
+  @apply min-h-screen bg-slate-950 text-slate-100 antialiased;
 }
 
-/* Layout */
-.app-container {
-    display: flex;
+::selection {
+  background: rgba(37, 99, 235, 0.5);
+  color: #ffffff;
 }
 
-.sidebar {
-    width: 250px;
-    height: 100vh;
-    background: #041C4A;
-    color: #fff;
-    padding: 20px;
+button,
+input,
+textarea,
+select {
+  @apply outline-none;
 }
 
-.main {
-    width: 100%;
+body::-webkit-scrollbar {
+  width: 10px;
 }
 
-.header {
-    height: 80px;
-    border-bottom: 1px solid #e6e9ef;
-    display: flex;
-    align-items: center;
-    padding: 0 20px;
-    background: #fff;
+body::-webkit-scrollbar-thumb {
+  background: rgba(100, 116, 139, 0.7);
+  border-radius: 9999px;
 }
 
-/* Cards */
-.cards-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
-    margin-top: 20px;
+body::-webkit-scrollbar-track {
+  background: transparent;
 }
 
-.card {
-    background: #fff;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+.glass-card {
+  @apply rounded-3xl border border-slate-800/80 bg-slate-900/80 shadow-soft backdrop-blur-xl;
 }
 
-/* Table */
-.table-box {
-    background: #fff;
-    padding: 20px;
-    border-radius: 12px;
-    margin-top: 20px;
+.fade-in {
+  animation: fadeIn 0.7s ease;
 }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-th, td {
-    text-align: left;
-    padding: 8px 12px;
+@keyframes slideInFromTop {
+  from {
+    opacity: 0;
+    transform: translateY(-24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-thead th {
-    background: #fafafa;
-    border-bottom: 1px solid #eee;
+@keyframes slideInFromBottom {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-tr:nth-child(even) td {
-    background: #fbfbfb;
+@keyframes glow {
+  0%,
+  100% {
+    text-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+  }
+  50% {
+    text-shadow: 0 0 20px rgba(59, 130, 246, 0.6);
+  }
 }
 
-.chart-box {
-    background: #fff;
-    padding: 20px;
-    border-radius: 12px;
+.animate-slide-in-top {
+  animation: slideInFromTop 0.6s ease;
 }
 
-/* small helpers */
-.page-padding { padding: 20px; }
+.animate-slide-in-bottom {
+  animation: slideInFromBottom 0.6s ease;
+}
+
+.animate-glow {
+  animation: glow 2s ease-in-out infinite;
+}
+
+.shadow-soft {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
