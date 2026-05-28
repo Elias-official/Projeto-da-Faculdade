@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from werkzeug.security import generate_password_hash, check_password_hash
 
 def criar_usuario(conn, data):
@@ -22,8 +22,18 @@ def criar_usuario(conn, data):
 
 
 def autenticar_usuario(conn, usuario, senha):
+    if not usuario or not senha:
+        return None
+
+    usuario_normalizado = usuario.strip()
     cursor = conn.cursor()
-    cursor.execute('SELECT * FROM usuarios WHERE username = ? OR email = ?', (usuario, usuario))
+    cursor.execute(
+        '''
+        SELECT * FROM usuarios
+        WHERE LOWER(username) = LOWER(?) OR LOWER(email) = LOWER(?)
+        ''',
+        (usuario_normalizado, usuario_normalizado)
+    )
     row = cursor.fetchone()
     if not row:
         return None
@@ -84,5 +94,5 @@ def deletar_usuario(conn, user_id):
 
 def atualizar_ultimo_login(conn, user_id):
     cursor = conn.cursor()
-    cursor.execute('UPDATE usuarios SET ultimo_login = ? WHERE id = ?', (datetime.utcnow().isoformat(), user_id))
+    cursor.execute('UPDATE usuarios SET ultimo_login = ? WHERE id = ?', (datetime.now(timezone.utc).isoformat(), user_id))
     conn.commit()

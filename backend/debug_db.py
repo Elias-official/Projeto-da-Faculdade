@@ -1,6 +1,6 @@
 import os
 import database.db as db
-from database.db import criar_tabelas, inserir_dados_padrao
+from backend.database.db import criar_tabelas, inserir_dados_padrao
 
 print('module DB_PATH:', db.DB_PATH)
 print('__file__', db.__file__)

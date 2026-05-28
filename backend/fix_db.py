@@ -1,6 +1,6 @@
 import os
 import sqlite3
-from database.db import criar_tabelas, inserir_dados_padrao
+from backend.database.db import criar_tabelas, inserir_dados_padrao
 
 base = os.getcwd()
 db_path = os.path.join(base, 'estoque.db')

@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required
-from database.db import conectar_banco
-from services.user_service import criar_usuario, listar_usuarios, buscar_usuario_por_id, atualizar_usuario, deletar_usuario
+from backend.database.db import conectar_banco
+from backend.services.user_service import criar_usuario, listar_usuarios, buscar_usuario_por_id, atualizar_usuario, deletar_usuario
 
 usuarios_bp = Blueprint('usuarios', __name__)
 

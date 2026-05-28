@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from database.db import conectar_banco
-from services.movimentacao_service import adicionar_movimentacao, listar_movimentacoes
+from backend.database.db import conectar_banco
+from backend.services.movimentacao_service import adicionar_movimentacao, listar_movimentacoes
 
 movimentacoes_bp = Blueprint('movimentacoes', __name__)
 

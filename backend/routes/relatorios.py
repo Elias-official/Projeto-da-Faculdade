@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, Response, request
 from flask_jwt_extended import jwt_required
-from database.db import conectar_banco
-from services.report_service import (
+from backend.database.db import conectar_banco
+from backend.services.report_service import (
     dashboard_resumo,
     categorias_por_produto,
     movimentacoes_por_tipo,

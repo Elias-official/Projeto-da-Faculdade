@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
-from database.db import conectar_banco
-from services.user_service import autenticar_usuario, criar_usuario, buscar_usuario_por_id, atualizar_ultimo_login
+from backend.database.db import conectar_banco
+from backend.services.user_service import autenticar_usuario, criar_usuario, buscar_usuario_por_id, atualizar_ultimo_login
 
 auth_bp = Blueprint('auth', __name__)
 
@@ -11,6 +11,9 @@ def login():
     dados = request.get_json() or {}
     usuario = dados.get('usuario') or dados.get('username') or dados.get('email') or dados.get('login')
     senha = dados.get('senha')
+
+    if isinstance(usuario, str):
+        usuario = usuario.strip()
 
     if not usuario or not senha:
         return jsonify({'erro': 'Usuário ou senha são obrigatórios'}), 400

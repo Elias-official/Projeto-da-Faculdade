@@ -1,14 +1,14 @@
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
-from database.db import conectar_banco
-from services.produto_service import (
+from backend.database.db import conectar_banco
+from backend.services.produto_service import (
     adicionar_produto,
     listar_produtos,
     buscar_produto,
     atualizar_produto,
     deletar_produto,
 )
-from services.report_service import dashboard_resumo, categorias_por_produto, movimentacoes_por_tipo
+from backend.services.report_service import dashboard_resumo, categorias_por_produto, movimentacoes_por_tipo
 
 produtos_bp = Blueprint('produtos', __name__)
 

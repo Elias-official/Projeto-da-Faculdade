@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
-from database.db import conectar_banco
-from services.categoria_service import (
+from backend.database.db import conectar_banco
+from backend.services.categoria_service import (
     listar_categorias,
     adicionar_categoria,
     obter_categoria,

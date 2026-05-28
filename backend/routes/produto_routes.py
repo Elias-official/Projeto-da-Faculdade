@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
-from database.db import conectar_banco
-from services.produto_service import adicionar_produto
+from backend.database.db import conectar_banco
+from backend.services.produto_service import adicionar_produto
 
 produtos_bp = Blueprint('produtos', __name__)
 
