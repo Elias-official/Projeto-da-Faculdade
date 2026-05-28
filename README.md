@@ -1,12 +1,27 @@
-# 💙 EstoqPro — Sistema de Controle de Estoque
+# <div align="center">💙 EstoqPro — Sistema de Controle de Estoque</div>
 
-<img width="1200" height="400" alt="banner" src="https://github.com/user-attachments/assets/banner.png" />
+<div align="center">
+
+### Sistema FULLSTACK moderno de gerenciamento de estoque
+
+<img src="https://img.shields.io/badge/React-Frontend-61DAFB?style=for-the-badge&logo=react" />
+<img src="https://img.shields.io/badge/Flask-Backend-000000?style=for-the-badge&logo=flask" />
+<img src="https://img.shields.io/badge/SQLite-Database-07405E?style=for-the-badge&logo=sqlite" />
+<img src="https://img.shields.io/badge/TailwindCSS-UI-38BDF8?style=for-the-badge&logo=tailwindcss" />
+<img src="https://img.shields.io/badge/Status-Em%20Desenvolvimento-1E90FF?style=for-the-badge" />
+
+<br><br>
+
+<p align="center">
+  <img src="https://i.pinimg.com/736x/d0/a9/ad/d0a9ad0e69bbf7f1e0529817ea67d8c9.jpg" alt="EstoqPro Banner"/>
+</p>
+</div>
 
 ---
 
-# Projeto-da-Faculdade
+# 📚 Projeto da Faculdade
 
-Esta é uma atividade da faculdade desenvolvida entre:
+Esta é uma atividade acadêmica desenvolvida entre:
 
 * Elias
 * Gabriel
@@ -19,9 +34,9 @@ Vamos nessa!! 💙
 
 ---
 
-## ✨ O que é o EstoqPro?
+# ✨ O que é o EstoqPro?
 
-O EstoqPro é um sistema web FULLSTACK moderno de controle de estoque criado com foco em:
+O **EstoqPro** é um sistema web FULLSTACK moderno de controle de estoque criado com foco em:
 
 * experiência visual moderna
 * arquitetura organizada
@@ -29,7 +44,7 @@ O EstoqPro é um sistema web FULLSTACK moderno de controle de estoque criado com
 * gerenciamento inteligente
 * interface futurista
 
-O projeto foi desenvolvido utilizando React + Flask e inspirado em dashboards modernos como:
+O projeto foi desenvolvido utilizando **React + Flask** e inspirado em dashboards modernos como:
 
 * Linear
 * Vercel
@@ -40,11 +55,57 @@ A ideia é transformar um sistema de estoque comum em algo visualmente bonito, m
 
 ---
 
+# 🛠️ Problema Identificado
+
+O projeto nasceu após a análise de falhas reais em sistemas de controle de estoque utilizados por empresas de vendas online.
+
+Foram identificados problemas como:
+
+* ❌ Cancelamento de pedidos
+* ⏰ Atrasos nas entregas
+* 💸 Perda de vendas
+* 😠 Insatisfação dos clientes
+
+Além disso, também foram encontrados:
+
+* divergência entre estoque físico e sistema
+* atualizações inconsistentes
+* processos manuais
+* falhas de integração
+* ausência de monitoramento
+
+---
+
+# 🎯 Objetivos do Projeto
+
+O sistema foi planejado com foco em:
+
+* identificar causas das falhas
+* priorizar problemas críticos
+* encontrar causas raiz
+* desenvolver soluções eficientes
+* automatizar processos
+* melhorar confiabilidade do estoque
+
+---
+
 # 🧠 Tecnologias Utilizadas
 
-## Frontend ⚛️
+# 💻 Linguagens
 
-```bash id="l5m2qp"
+```bash id="w5j3vn"
+JavaScript
+Python
+SQL
+HTML5
+CSS3
+```
+
+---
+
+# ⚛️ Frontend
+
+```bash id="c2m8qp"
 React
 Vite
 TailwindCSS
@@ -52,16 +113,20 @@ Axios
 React Router DOM
 Recharts
 Lucide React
+JavaScript
 ```
 
-## Backend 🐍
+---
 
-```bash id="r8w4zn"
+# 🐍 Backend
+
+```bash id="x7p1zn"
 Flask
 SQLite
 Flask-JWT-Extended
 Flask-CORS
 Werkzeug Security
+Python
 ```
 
 ---
@@ -75,7 +140,7 @@ O sistema possui:
 * ✨ Animações suaves
 * 💙 Visual futurista
 * 📱 Responsividade
-* 📦 Sistema de estoque inteligente
+* 📦 Sistema inteligente de estoque
 * 🔔 Notificações
 * 📈 Gráficos animados
 
@@ -83,7 +148,7 @@ O sistema possui:
 
 # 📦 Funcionalidades
 
-## Produtos
+# 📦 Produtos
 
 * Cadastro
 * Edição
@@ -94,7 +159,7 @@ O sistema possui:
 
 ---
 
-## Dashboard
+# 📊 Dashboard
 
 * Total de produtos
 * Produtos críticos
@@ -105,7 +170,7 @@ O sistema possui:
 
 ---
 
-## Usuários
+# 👤 Usuários
 
 * Login
 * Cadastro
@@ -115,9 +180,131 @@ O sistema possui:
 
 ---
 
+# 📑 Sistema de Relatórios
+
+A página de relatórios recebeu diversas melhorias importantes para tornar a exportação mais profissional e funcional.
+
+## ✅ Correções realizadas
+
+### 🛠️ Correção da tela branca
+
+O erro estava em:
+
+```jsx id="q7n2vl"
+Relatorios.jsx
+```
+
+O problema ocorreu porque o ícone:
+
+```jsx id="t9v5xs"
+Sheet3
+```
+
+não existe no `lucide-react`.
+
+Ele foi substituído corretamente por:
+
+```jsx id="g8y1mq"
+Table
+```
+
+---
+
+# 📥 Melhorias nos Downloads
+
+O sistema agora:
+
+* utiliza `responseType: 'blob'`
+* cria Blob corretamente
+* extrai o nome do arquivo automaticamente
+* usa `content-disposition`
+* melhora compatibilidade do download
+
+---
+
+# ✨ Feedback Visual
+
+Agora o sistema possui:
+
+* botões desativados durante exportação
+* texto “Gerando...” durante download
+* mensagens de sucesso
+* melhor experiência de usuário
+
+---
+
+# 📁 Exportações Disponíveis
+
+## 📦 Produtos
+
+* CSV
+* XLSX
+* PDF
+
+## 📈 Movimentações
+
+* CSV
+* XLSX
+* PDF
+
+---
+
+# 🔎 Metodologias Utilizadas
+
+Durante o desenvolvimento e análise do projeto foram utilizadas ferramentas de qualidade e gestão.
+
+## 📌 Diagrama de Ishikawa
+
+Utilizado para identificar causas das falhas no estoque.
+
+---
+
+## 📊 Gráfico de Pareto
+
+Aplicado para priorizar os problemas mais críticos.
+
+---
+
+## ❓ Técnica dos 5 Porquês
+
+Utilizada para encontrar a causa raiz dos problemas.
+
+Resultado identificado:
+
+```bash id="r4o7dx"
+Dados não atualizados
+↓
+Falha de sincronização
+↓
+Problema na integração
+↓
+Sobrecarga do servidor
+↓
+Falta de escalabilidade
+
+CAUSA RAIZ:
+Infraestrutura insuficiente
+```
+
+---
+
+# 🔐 Sistema Inteligente de Estoque
+
+O sistema possui status automáticos:
+
+```bash id="m6p2jk"
+🔴 Crítico → estoque <= 5
+
+🟡 Atenção → estoque <= estoque mínimo
+
+🟢 Normal → estoque acima do mínimo
+```
+
+---
+
 # 📁 Estrutura do Projeto
 
-```bash id="n3x7qp"
+```bash id="v3x8nf"
 Projeto_1/
 │
 ├── backend/
@@ -141,9 +328,9 @@ Projeto_1/
 
 # ⚙️ Instalação
 
-## Clonar projeto
+# 🔹 Clonar projeto
 
-```bash id="d6q2vx"
+```bash id="z8n4qs"
 git clone https://github.com/Elias-official/Projeto-da-Faculdade.git
 ```
 
@@ -151,7 +338,7 @@ git clone https://github.com/Elias-official/Projeto-da-Faculdade.git
 
 # 🔹 Backend
 
-```bash id="y4m8zn"
+```bash id="k1m9px"
 cd backend
 
 python -m venv .venv
@@ -161,7 +348,11 @@ python -m venv .venv
 pip install -r requirements.txt
 
 python -m backend.app
+```
+
 ou
+
+```bash id="e7v2jc"
 python app.py
 ```
 
@@ -169,26 +360,12 @@ python app.py
 
 # 🔹 Frontend
 
-```bash id="t8w3qp"
+```bash id="f9x3zl"
 cd frontend
 
 npm install
 
 npm run dev
-```
-
----
-
-# 🔐 Sistema de Estoque
-
-O sistema possui status automáticos:
-
-```bash id="p7x1vn"
-🔴 Crítico → estoque <= 5
-
-🟡 Atenção → estoque <= estoque mínimo
-
-🟢 Normal → estoque acima do mínimo
 ```
 
 ---
@@ -206,30 +383,32 @@ O sistema funciona em:
 
 # 🚀 Futuras Melhorias
 
-* 📄 Exportação PDF
+* 📄 Exportação PDF avançada
 * ☁️ Deploy cloud
 * 🐳 Docker
 * 📈 Relatórios avançados
 * 🔔 Notificações em tempo real
 * 📱 Aplicativo mobile
+* 👥 Sistema de permissões
+* 📊 Dashboard analítico avançado
 
 ---
 
 # 👨‍💻 Desenvolvedores
 
-```bash id="v2m9qx"
+```bash id="u2v8zn"
 Elias
 Gabriel
 Suzana
 Vinicius
 ```
 
-💙 Projeto acadêmico com foco em evolução FULLSTACK e arquitetura moderna.
+💙 Projeto acadêmico com foco em evolução FULLSTACK, arquitetura moderna e experiência visual moderna.
 
 ---
 
 # ⭐ Status
 
-```bash id="h5q7zn"
-🚧 EM DESENVOLVIMENTO 🚧
+```bash id="j4q7yn"
+🚧 O projeto continua recebendo melhorias, novas funcionalidades e otimizações constantes.
 ```
