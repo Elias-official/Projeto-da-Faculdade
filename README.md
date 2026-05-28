@@ -160,6 +160,8 @@ python -m venv .venv
 
 pip install -r requirements.txt
 
+python -m backend.app
+ou
 python app.py
 ```
 
