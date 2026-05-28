@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify, Response, request
 from flask_jwt_extended import jwt_required
+from datetime import datetime
 from backend.database.db import conectar_banco
 from backend.services.report_service import (
     dashboard_resumo,
@@ -92,8 +93,9 @@ def exportar_produtos_csv():
     """Exporta produtos em CSV."""
     with conectar_banco() as conn:
         csv_data = export_produtos_csv(conn)
+    timestamp = datetime.now().strftime('%d-%m-%Y_%H-%M-%S')
     return Response(csv_data, mimetype='text/csv', headers={
-        'Content-Disposition': 'attachment; filename=produtos.csv'
+        'Content-Disposition': f'attachment; filename=produtos_{timestamp}.csv'
     })
 
 
@@ -103,8 +105,9 @@ def exportar_movimentacoes_csv():
     """Exporta movimentações em CSV."""
     with conectar_banco() as conn:
         csv_data = export_movimentacoes_csv(conn)
+    timestamp = datetime.now().strftime('%d-%m-%Y_%H-%M-%S')
     return Response(csv_data, mimetype='text/csv', headers={
-        'Content-Disposition': 'attachment; filename=movimentacoes.csv'
+        'Content-Disposition': f'attachment; filename=movimentacoes_{timestamp}.csv'
     })
 
 
@@ -114,8 +117,9 @@ def exportar_produtos_pdf():
     """Exporta produtos em PDF."""
     with conectar_banco() as conn:
         pdf_data = export_produtos_pdf(conn)
+    timestamp = datetime.now().strftime('%d-%m-%Y_%H-%M-%S')
     return Response(pdf_data, mimetype='application/pdf', headers={
-        'Content-Disposition': 'attachment; filename=produtos.pdf'
+        'Content-Disposition': f'attachment; filename=produtos_{timestamp}.pdf'
     })
 
 
@@ -125,8 +129,9 @@ def exportar_movimentacoes_pdf():
     """Exporta movimentações em PDF."""
     with conectar_banco() as conn:
         pdf_data = export_movimentacoes_pdf(conn)
+    timestamp = datetime.now().strftime('%d-%m-%Y_%H-%M-%S')
     return Response(pdf_data, mimetype='application/pdf', headers={
-        'Content-Disposition': 'attachment; filename=movimentacoes.pdf'
+        'Content-Disposition': f'attachment; filename=movimentacoes_{timestamp}.pdf'
     })
 
 
@@ -136,8 +141,9 @@ def exportar_produtos_xlsx():
     """Exporta produtos em XLSX."""
     with conectar_banco() as conn:
         xlsx_data = export_produtos_xlsx(conn)
+    timestamp = datetime.now().strftime('%d-%m-%Y_%H-%M-%S')
     return Response(xlsx_data, mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', headers={
-        'Content-Disposition': 'attachment; filename=produtos.xlsx'
+        'Content-Disposition': f'attachment; filename=produtos_{timestamp}.xlsx'
     })
 
 
@@ -147,6 +153,7 @@ def exportar_movimentacoes_xlsx():
     """Exporta movimentações em XLSX."""
     with conectar_banco() as conn:
         xlsx_data = export_movimentacoes_xlsx(conn)
+    timestamp = datetime.now().strftime('%d-%m-%Y_%H-%M-%S')
     return Response(xlsx_data, mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', headers={
-        'Content-Disposition': 'attachment; filename=movimentacoes.xlsx'
+        'Content-Disposition': f'attachment; filename=movimentacoes_{timestamp}.xlsx'
     })

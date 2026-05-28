@@ -1,6 +1,7 @@
 import csv
 import io
 from datetime import datetime, timedelta
+from io import BytesIO
 
 
 def dashboard_resumo(conn):
@@ -132,12 +133,14 @@ def valor_total_estoque_por_categoria(conn):
 
 
 def export_produtos_csv(conn):
-    """Exporta produtos em CSV."""
+    """Exporta produtos em CSV com timestamp."""
     cursor = conn.cursor()
     cursor.execute('SELECT codigo, produto, marca, categoria, estoque_atual, estoque_minimo, preco, status, criado_em FROM produtos ORDER BY produto')
     rows = cursor.fetchall()
     output = io.StringIO()
     writer = csv.writer(output)
+    writer.writerow(['Relatório de Produtos - Gerado em ' + datetime.now().strftime('%d/%m/%Y %H:%M:%S')])
+    writer.writerow([])
     writer.writerow(['Código', 'Produto', 'Marca', 'Categoria', 'Estoque Atual', 'Estoque Mínimo', 'Preço', 'Status', 'Criado em'])
     for row in rows:
         writer.writerow([
@@ -251,44 +254,69 @@ def export_movimentacoes_pdf(conn):
 
 
 def export_produtos_xlsx(conn):
-    """Exporta produtos em XLSX."""
-    import io
+    """Exporta produtos em XLSX com formatação."""
     import xlsxwriter
 
-    output = io.BytesIO()
+    output = BytesIO()
     workbook = xlsxwriter.Workbook(output, {'in_memory': True})
     worksheet = workbook.add_worksheet('Produtos')
+    
+    # Título
+    title_format = workbook.add_format({'bold': True, 'font_size': 14, 'bg_color': '#0f172a', 'font_color': '#ffffff'})
+    worksheet.write(0, 0, 'Relatório de Produtos', title_format)
+    worksheet.write(1, 0, f"Gerado em {datetime.now().strftime('%d/%m/%Y %H:%M:%S')}", workbook.add_format({'italic': True, 'font_size': 10}))
+    
+    # Headers
+    header_format = workbook.add_format({'bold': True, 'bg_color': '#0f172a', 'font_color': '#ffffff', 'border': 1})
     headers = ['Código', 'Produto', 'Categoria', 'Estoque Atual', 'Estoque Mínimo', 'Preço', 'Status']
     for idx, header in enumerate(headers):
-        worksheet.write(0, idx, header)
+        worksheet.write(3, idx, header, header_format)
 
+    # Dados
     cursor = conn.cursor()
     cursor.execute('SELECT codigo, produto, categoria, estoque_atual, estoque_minimo, preco, status FROM produtos ORDER BY produto')
-    for row_index, row in enumerate(cursor.fetchall(), start=1):
-        worksheet.write(row_index, 0, row['codigo'])
-        worksheet.write(row_index, 1, row['produto'])
-        worksheet.write(row_index, 2, row['categoria'])
-        worksheet.write(row_index, 3, row['estoque_atual'])
-        worksheet.write(row_index, 4, row['estoque_minimo'])
-        worksheet.write(row_index, 5, row['preco'])
-        worksheet.write(row_index, 6, row['status'])
-
+    data_format = workbook.add_format({'border': 1})
+    for row_index, row in enumerate(cursor.fetchall(), start=4):
+        worksheet.write(row_index, 0, row['codigo'], data_format)
+        worksheet.write(row_index, 1, row['produto'], data_format)
+        worksheet.write(row_index, 2, row['categoria'], data_format)
+        worksheet.write(row_index, 3, row['estoque_atual'], data_format)
+        worksheet.write(row_index, 4, row['estoque_minimo'], data_format)
+        worksheet.write(row_index, 5, row['preco'], data_format)
+        worksheet.write(row_index, 6, row['status'], data_format)
+    
+    # Larguras de coluna
+    worksheet.set_column(0, 0, 12)
+    worksheet.set_column(1, 1, 30)
+    worksheet.set_column(2, 2, 15)
+    worksheet.set_column(3, 3, 15)
+    worksheet.set_column(4, 4, 15)
+    worksheet.set_column(5, 5, 15)
+    worksheet.set_column(6, 6, 20)
+    
     workbook.close()
     output.seek(0)
     return output.read()
 
 
 def export_movimentacoes_xlsx(conn):
-    """Exporta movimentações em XLSX."""
-    import io
+    """Exporta movimentações em XLSX com formatação."""
     import xlsxwriter
 
-    output = io.BytesIO()
+    output = BytesIO()
     workbook = xlsxwriter.Workbook(output, {'in_memory': True})
     worksheet = workbook.add_worksheet('Movimentacoes')
+    
+    # Título
+    title_format = workbook.add_format({'bold': True, 'font_size': 14, 'bg_color': '#0f172a', 'font_color': '#ffffff'})
+    worksheet.write(0, 0, 'Relatório de Movimentações', title_format)
+    worksheet.write(1, 0, f"Gerado em {datetime.now().strftime('%d/%m/%Y %H:%M:%S')}", workbook.add_format({'italic': True, 'font_size': 10}))
+    
+    # Headers
+    header_format = workbook.add_format({'bold': True, 'bg_color': '#0f172a', 'font_color': '#ffffff', 'border': 1})
     headers = ['ID', 'Produto', 'Usuário', 'Tipo', 'Quantidade', 'Data Movimentacao']
     for idx, header in enumerate(headers):
-        worksheet.write(0, idx, header)
+        worksheet.write(3, idx, header, header_format)
 
     cursor = conn.cursor()
     cursor.execute('''
@@ -298,14 +326,23 @@ def export_movimentacoes_xlsx(conn):
         LEFT JOIN usuarios u ON u.id = m.usuario_id
         ORDER BY m.data_movimentacao DESC
     ''')
-    for row_index, row in enumerate(cursor.fetchall(), start=1):
-        worksheet.write(row_index, 0, row['id'])
-        worksheet.write(row_index, 1, row['produto'])
-        worksheet.write(row_index, 2, row['usuario'])
-        worksheet.write(row_index, 3, row['tipo'])
-        worksheet.write(row_index, 4, row['quantidade'])
-        worksheet.write(row_index, 5, row['data_movimentacao'])
-
+    data_format = workbook.add_format({'border': 1})
+    for row_index, row in enumerate(cursor.fetchall(), start=4):
+        worksheet.write(row_index, 0, row['id'], data_format)
+        worksheet.write(row_index, 1, row['produto'], data_format)
+        worksheet.write(row_index, 2, row['usuario'], data_format)
+        worksheet.write(row_index, 3, row['tipo'], data_format)
+        worksheet.write(row_index, 4, row['quantidade'], data_format)
+        worksheet.write(row_index, 5, row['data_movimentacao'], data_format)
+    
+    # Larguras de coluna
+    worksheet.set_column(0, 0, 8)
+    worksheet.set_column(1, 1, 30)
+    worksheet.set_column(2, 2, 15)
+    worksheet.set_column(3, 3, 15)
+    worksheet.set_column(4, 4, 12)
+    worksheet.set_column(5, 5, 25)
+    
     workbook.close()
     output.seek(0)
     return output.read()
@@ -345,6 +382,8 @@ def export_movimentacoes_csv(conn):
     rows = cursor.fetchall()
     output = io.StringIO()
     writer = csv.writer(output)
+    writer.writerow(['Relatório de Movimentações - Gerado em ' + datetime.now().strftime('%d/%m/%Y %H:%M:%S')])
+    writer.writerow([])
     writer.writerow(['ID', 'Produto', 'Usuário', 'Tipo', 'Quantidade', 'Data Movimentação'])
     for row in rows:
         writer.writerow([
