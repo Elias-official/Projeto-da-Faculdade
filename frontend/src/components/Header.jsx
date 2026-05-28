@@ -40,7 +40,7 @@ function Header() {
           </div>
         </div>
       </div>
-      <NotificationPanel open={open} />
+      <NotificationPanel open={open} onClose={() => setOpen(false)} />
     </header>
   )
 }

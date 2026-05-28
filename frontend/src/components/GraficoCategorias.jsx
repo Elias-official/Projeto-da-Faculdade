@@ -3,6 +3,7 @@ import { api } from '../services/api'
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts'
 
 const COLORS = ['#38bdf8', '#60a5fa', '#818cf8', '#a78bfa', '#c084fc', '#f472b6']
+const RADIAN = Math.PI / 180
 
 function GraficoCategorias() {
   const [dados, setDados] = useState([])
@@ -11,6 +12,20 @@ function GraficoCategorias() {
   useEffect(() => {
     buscarDados()
   }, [])
+
+  const total = dados.reduce((sum, item) => sum + Number(item.total || 0), 0)
+
+  const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent }) => {
+    const radius = innerRadius + (outerRadius - innerRadius) * 0.5
+    const x = cx + radius * Math.cos(-midAngle * RADIAN)
+    const y = cy + radius * Math.sin(-midAngle * RADIAN)
+
+    return (
+      <text x={x} y={y} fill="#f8fafc" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central" fontSize={10}>
+        {`${(percent * 100).toFixed(0)}%`}
+      </text>
+    )
+  }
 
   async function buscarDados() {
     try {
@@ -43,10 +58,11 @@ function GraficoCategorias() {
                 data={dados} 
                 dataKey="total" 
                 nameKey="categoria" 
-                outerRadius={80} 
-                innerRadius={40} 
+                outerRadius={90} 
+                innerRadius={45} 
                 paddingAngle={2}
-                label={({ categoria, total }) => `${categoria}: ${total}`}
+                label={renderCustomizedLabel}
+                labelLine={false}
               >
                 {dados.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
@@ -54,6 +70,7 @@ function GraficoCategorias() {
               </Pie>
               <Tooltip 
                 formatter={(value) => `${value} itens`}
+                labelFormatter={(label) => `${label}`}
                 contentStyle={{
                   backgroundColor: '#1e293b',
                   border: '1px solid #475569',
@@ -61,7 +78,10 @@ function GraficoCategorias() {
                   color: '#f1f5f9'
                 }}
               />
-              <Legend />
+              <Legend formatter={(value, entry) => {
+                const percent = total ? ((entry.payload.total / total) * 100).toFixed(1) : '0.0'
+                return `${value} • ${percent}%`
+              }} />
             </PieChart>
           </ResponsiveContainer>
         ) : (

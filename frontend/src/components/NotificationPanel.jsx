@@ -1,17 +1,35 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { api } from '../services/api'
-import { BellRing, AlertTriangle, Activity, Package } from 'lucide-react'
+import { BellRing, AlertTriangle, Activity } from 'lucide-react'
 
-function NotificationPanel({ open }) {
+function NotificationPanel({ open, onClose }) {
   const [produtos, setProdutos] = useState([])
   const [movimentacoes, setMovimentacoes] = useState([])
+  const panelRef = useRef(null)
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    if (open) {
-      buscarAlertas()
-      buscarMovimentacoes()
+    setMounted(true)
+  }, [])
+
+  useEffect(() => {
+    if (!open) {
+      return
     }
-  }, [open])
+
+    buscarAlertas()
+    buscarMovimentacoes()
+
+    function handleClickOutside(event) {
+      if (panelRef.current && !panelRef.current.contains(event.target)) {
+        onClose?.()
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [open, onClose])
 
   async function buscarAlertas() {
     try {
@@ -31,12 +49,12 @@ function NotificationPanel({ open }) {
     }
   }
 
-  if (!open) {
+  if (!open || !mounted) {
     return null
   }
 
-  return (
-    <div className="glass-card absolute right-6 top-28 w-full max-w-sm rounded-[2rem] border border-slate-800 bg-slate-950/95 p-6 shadow-soft backdrop-blur-xl" style={{ zIndex: 9999 }}>
+  const panel = (
+    <div ref={panelRef} className="glass-card fixed right-6 top-24 w-full max-w-sm rounded-[2rem] border border-slate-800 bg-slate-950/95 p-6 shadow-soft backdrop-blur-xl" style={{ zIndex: 9999 }}>
       <div className="flex items-center justify-between gap-3">
         <div>
           <p className="text-sm uppercase tracking-[0.3em] text-slate-400">Notificações</p>
@@ -57,9 +75,14 @@ function NotificationPanel({ open }) {
                     <p className="font-semibold text-slate-100">{produto.produto}</p>
                     <p className="text-sm text-slate-400">{produto.status}</p>
                   </div>
-                  <span className="inline-flex items-center gap-1 rounded-full bg-red-500/15 px-3 py-1 text-xs font-semibold text-red-300">
-                    <AlertTriangle size={12} /> Crítico
-                  </span>
+                  {(() => {
+                    const isAttention = produto.status?.toLowerCase().includes('atenção')
+                    return (
+                      <span className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-semibold ${isAttention ? 'bg-amber-500/15 text-amber-300' : 'bg-red-500/15 text-red-300'}`}>
+                        <AlertTriangle size={12} /> {isAttention ? 'Atenção' : 'Crítico'}
+                      </span>
+                    )
+                  })()}
                 </div>
               </div>
             ))
@@ -92,6 +115,8 @@ function NotificationPanel({ open }) {
       </div>
     </div>
   )
+
+  return createPortal(panel, document.body)
 }
 
 export default NotificationPanel
